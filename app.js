@@ -461,7 +461,7 @@ function renderBoard(type, data, changes) {
 
   // ── Podium: 3 besar ──
   const top3   = data.slice(0, 3);
-  const scoreUnit = type === 'jawara' ? 'menang' : 'lomba';
+   const scoreUnit = type === 'jawara' ? 'Point' : 'Point';
 
   podiumEl.innerHTML = top3.map((p, i) => {
     const rank   = i + 1;
