@@ -337,7 +337,7 @@ function addRow(type, data = {}) {
   tr.innerHTML = `
     <td>${idx}</td>
     <td><input type="text" value="${data.nama || ''}" placeholder="Nama Peserta" /></td>
-    <td><input type="text" value="${data.asal || ''}" placeholder="Asal Daerah" /></td>
+    <td><input type="text" value="${data.asal || ''}" placeholder="Kelas" /></td>
     <td><input type="number" value="${data.skor || 0}" min="0" placeholder="${scoreLabel}" /></td>
     <td><button class="tbl-del-btn" onclick="this.closest('tr').remove()">🗑</button></td>
   `;
