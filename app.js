@@ -21,8 +21,8 @@
 const CONFIG = {
   // ── Nama & tagline event ──────────────────────────────────────
   // Tampil di header leaderboard. Bisa diubah juga dari admin panel.
-  eventTitle  : "NAMA EVENT",
-  eventTagline: "Tagline Event · Tahun",
+  eventTitle  : "SMART CHARACTER FESTIVAL",
+  eventTagline: "BUDAYA LOKAL DI ERA GLOBAL",
 
   // ── Google Sheet ──────────────────────────────────────────────
   // Cara mendapatkan SHEET_ID:
