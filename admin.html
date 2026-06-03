@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚙️ Admin Panel — Papan Juara</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Reem+Kufi:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="admin-body">
+
+  <div class="bg-layer"></div>
+  <div class="batik-overlay"></div>
+
+  <!-- =============================================
+       LOGIN OVERLAY
+       Username & password dikonfigurasi di app.js
+       Variabel: ADMIN_USER dan ADMIN_PASS
+  ============================================= -->
+  <div class="login-overlay" id="login-overlay">
+    <div class="login-box">
+      <div class="login-icon">🏮</div>
+      <h2 class="login-title">Portal Admin</h2>
+      <p class="login-sub">Masukkan kredensial untuk lanjut</p>
+
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="inp-user" placeholder="admin" autocomplete="off" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="inp-pass" placeholder="••••••••" />
+      </div>
+
+      <p class="login-error" id="login-error"></p>
+
+      <button class="btn-primary" onclick="doLogin()">Masuk ⚡</button>
+      <a href="index.html" class="btn-ghost">← Kembali ke Leaderboard</a>
+    </div>
+  </div>
+
+  <!-- =============================================
+       PANEL ADMIN (tampil setelah login)
+  ============================================= -->
+  <div class="admin-panel" id="admin-panel" style="display:none">
+
+    <!-- Header Admin -->
+    <header class="admin-header">
+      <h1>⚙️ Admin Panel — Papan Juara</h1>
+      <div class="admin-header-actions">
+        <a href="index.html" class="btn-ghost" target="_blank">👁 Lihat Leaderboard</a>
+        <button class="btn-danger" onclick="doLogout()">Keluar 🔒</button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+
+      <!-- ══════════════════════════════════════
+           SEKSI 1: PENGATURAN EVENT
+      ══════════════════════════════════════ -->
+      <section class="admin-card">
+        <h3>📋 Pengaturan Event</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nama Event</label>
+            <!-- Ganti placeholder sesuai event Anda -->
+            <input type="text" id="cfg-title" placeholder="Contoh: Festival Tradisi Nusantara 2025" />
+          </div>
+          <div class="form-group">
+            <label>Tagline / Sub-judul</label>
+            <input type="text" id="cfg-tagline" placeholder="Contoh: Merayakan Warisan Budaya · 2025" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Google Sheet ID</label>
+            <!--
+              Cara mendapatkan Sheet ID:
+              Buka Google Sheet → lihat URL:
+              https://docs.google.com/spreadsheets/d/[SHEET_ID]/edit
+              Salin bagian [SHEET_ID]
+            -->
+            <input type="text" id="cfg-sheet-id" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms" />
+          </div>
+          <div class="form-group">
+            <label>Interval Auto-Refresh (detik)</label>
+            <input type="number" id="cfg-refresh" value="30" min="10" max="300" />
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="saveConfig()">💾 Simpan Pengaturan</button>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SEKSI 2: KONEKSI GOOGLE SHEET
+      ══════════════════════════════════════ -->
+      <section class="admin-card">
+        <h3>🔗 Status Koneksi Google Sheet</h3>
+        <div class="connection-status" id="conn-status">
+          <span class="status-dot idle"></span>
+          <span id="conn-msg">Belum terhubung</span>
+        </div>
+        <button class="btn-secondary" onclick="testConnection()">🔄 Test Koneksi &amp; Refresh Data</button>
+        <p class="hint">
+          Pastikan Google Sheet sudah dipublikasikan:<br/>
+          <strong>File → Bagikan → Publikasikan ke web → Pilih sheet → Format CSV → Publikasikan</strong>
+        </p>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SEKSI 3: KELOLA DATA MANUAL
+           (Backup jika tanpa Google Sheet)
+      ══════════════════════════════════════ -->
+      <section class="admin-card">
+        <h3>✏️ Edit Data Manual (Override)</h3>
+        <p class="hint">Data ini akan menimpa data dari Google Sheet. Kosongkan semua untuk kembali ke Sheet.</p>
+
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('tab-jawara')">👑 Jawara</button>
+          <button class="tab" onclick="switchTab('tab-penjelajah')">🗺️ Penjelajah</button>
+        </div>
+
+        <!-- TAB JAWARA -->
+        <div class="tab-content active" id="tab-jawara">
+          <table class="admin-table" id="tbl-jawara">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nama Peserta</th>
+                <th>Kelas</th>
+                <th>Jumlah Menang</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-jawara">
+              <!-- Baris diisi oleh JS -->
+            </tbody>
+          </table>
+          <button class="btn-secondary btn-sm" onclick="addRow('jawara')">➕ Tambah Peserta</button>
+        </div>
+
+        <!-- TAB PENJELAJAH -->
+        <div class="tab-content" id="tab-penjelajah">
+          <table class="admin-table" id="tbl-penjelajah">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nama Peserta</th>
+                <th>Kelas</th>
+                <th>Jumlah Ikut Lomba</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-penjelajah">
+              <!-- Baris diisi oleh JS -->
+            </tbody>
+          </table>
+          <button class="btn-secondary btn-sm" onclick="addRow('penjelajah')">➕ Tambah Peserta</button>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-primary" onclick="saveManualData()">💾 Simpan &amp; Terapkan</button>
+          <button class="btn-danger" onclick="resetData()">🗑️ Reset Semua Data</button>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           SEKSI 4: PREVIEW LIVE
+      ══════════════════════════════════════ -->
+      <section class="admin-card">
+        <h3>👁 Preview Data Saat Ini</h3>
+        <div class="preview-grid">
+          <div>
+            <h4>👑 Top 10 Jawara</h4>
+            <ol id="preview-jawara" class="preview-list"></ol>
+          </div>
+          <div>
+            <h4>🗺️ Top 10 Penjelajah</h4>
+            <ol id="preview-penjelajah" class="preview-list"></ol>
+          </div>
+        </div>
+        <button class="btn-secondary" onclick="refreshPreview()">🔄 Refresh Preview</button>
+      </section>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-panel -->
+
+  <script src="app.js"></script>
+  <script>
+    // Inisialisasi halaman admin setelah DOM siap
+    document.addEventListener('DOMContentLoaded', initAdmin);
+  </script>
+</body>
+</html>

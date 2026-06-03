@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏆 Papan Juara — Leaderboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Google Fonts: Cinzel (display) + Noto Serif (body) -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Reem+Kufi:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Canvas Confetti untuk efek juara -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- =============================================
+       AUDIO ELEMENTS
+       Ganti src dengan file audio lokal jika diperlukan
+  ============================================= -->
+  <audio id="sfx-rank-up"   src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+  <audio id="sfx-rank-down" src="https://assets.mixkit.co/active_storage/sfx/2575/2575-preview.mp3" preload="auto"></audio>
+  <audio id="sfx-confetti"  src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" preload="auto"></audio>
+  <audio id="bgm-loop" src="https://assets.mixkit.co/active_storage/sfx/2552/2552-preview.mp3" loop preload="auto"></audio>
+
+  <!-- =============================================
+       ORNAMEN BACKGROUND & DEKORASI
+  ============================================= -->
+  <div class="bg-layer"></div>
+  <div class="batik-overlay"></div>
+
+  <!-- Partikel wayang / daun -->
+  <div class="particles" id="particles"></div>
+
+  <!-- =============================================
+       HEADER UTAMA
+  ============================================= -->
+  <header class="site-header">
+    <div class="header-ornament top-left"></div>
+    <div class="header-ornament top-right"></div>
+
+    <div class="header-inner">
+      <!-- Logo / Icon event -->
+      <div class="event-emblem">
+        <span class="emblem-icon">🏮</span>
+      </div>
+
+      <div class="header-text">
+        <!-- Ganti teks berikut sesuai nama event -->
+        <p class="header-sub">✦ Papan Kejuaraan ✦</p>
+        <h1 class="header-title" id="event-title">NAMA EVENT</h1>
+        <p class="header-tagline" id="event-tagline">Tagline Event · Tahun</p>
+      </div>
+
+      <div class="event-emblem">
+        <span class="emblem-icon">🪔</span>
+      </div>
+    </div>
+
+    <!-- Tombol kontrol -->
+    <div class="header-controls">
+      <!-- Toggle Musik -->
+      <button class="ctrl-btn" id="btn-music" title="Toggle Musik" onclick="toggleMusic()">🎵</button>
+      <!-- Link ke halaman Admin -->
+      <a href="admin.html" class="ctrl-btn admin-link" title="Admin Panel">⚙️</a>
+      <!-- Indikator auto-refresh -->
+      <div class="refresh-indicator" id="refresh-indicator">
+        <span class="refresh-dot"></span>
+        <span class="refresh-label">Live</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- =============================================
+       AREA LEADERBOARD UTAMA (rasio 16:9)
+  ============================================= -->
+  <main class="leaderboard-stage">
+
+    <!-- ── KIRI: JAWARA (Pemenang Terbanyak) ── -->
+    <section class="board-panel board-jawara" id="board-jawara">
+
+      <div class="panel-header">
+        <div class="panel-crown">👑</div>
+        <h2 class="panel-title">JAWARA</h2>
+        <p class="panel-subtitle">Pemenang Terbanyak</p>
+        <div class="panel-divider"></div>
+      </div>
+
+      <!-- Podium 3 besar -->
+      <div class="podium-row" id="podium-jawara">
+        <!-- Diisi oleh JavaScript -->
+      </div>
+
+      <!-- List rank 4–10 -->
+      <ol class="rank-list" id="list-jawara">
+        <!-- Diisi oleh JavaScript -->
+      </ol>
+
+      <!-- Watermark / stamp -->
+      <div class="panel-stamp">🏆</div>
+    </section>
+
+    <!-- ── TENGAH: PEMISAH DEKORATIF ── -->
+    <div class="center-divider">
+      <div class="divider-ornament">
+        <span>⚜</span>
+      </div>
+    </div>
+
+    <!-- ── KANAN: PENJELAJAH (Peserta Terbanyak Ikut Lomba) ── -->
+    <section class="board-panel board-penjelajah" id="board-penjelajah">
+
+      <div class="panel-header">
+        <div class="panel-crown">🗺️</div>
+        <h2 class="panel-title">PENJELAJAH</h2>
+        <p class="panel-subtitle">Peserta Teraktif</p>
+        <div class="panel-divider"></div>
+      </div>
+
+      <!-- Podium 3 besar -->
+      <div class="podium-row" id="podium-penjelajah">
+        <!-- Diisi oleh JavaScript -->
+      </div>
+
+      <!-- List rank 4–10 -->
+      <ol class="rank-list" id="list-penjelajah">
+        <!-- Diisi oleh JavaScript -->
+      </ol>
+
+      <!-- Watermark / stamp -->
+      <div class="panel-stamp">🌿</div>
+    </section>
+
+  </main>
+
+  <!-- =============================================
+       FOOTER
+  ============================================= -->
+  <footer class="site-footer">
+    <p>Diperbarui: <span id="last-update">—</span> &nbsp;|&nbsp; Data dari Google Sheet &nbsp;|&nbsp; <span id="total-peserta">0</span> Peserta Terdaftar</p>
+  </footer>
+
+  <!-- =============================================
+       OVERLAY NOTIFIKASI RANK CHANGE
+  ============================================= -->
+  <div class="rank-toast" id="rank-toast">
+    <span id="rank-toast-icon">⬆️</span>
+    <span id="rank-toast-msg">Nama Peserta naik ke #1!</span>
+  </div>
+
+  <!-- Script Utama -->
+  <script src="app.js"></script>
+</body>
+</html>
