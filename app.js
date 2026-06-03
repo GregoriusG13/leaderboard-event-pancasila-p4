@@ -332,7 +332,7 @@ function addRow(type, data = {}) {
   const tbody = document.getElementById(`tbody-${type}`);
   if (!tbody) return;
   const idx = tbody.rows.length + 1;
-  const scoreLabel = type === 'jawara' ? 'Jml Menang' : 'Jml Lomba';
+  const scoreLabel = type === 'jawara' ? 'Jml Point' : 'Jml Point';
   const tr = document.createElement('tr');
   tr.innerHTML = `
     <td>${idx}</td>
@@ -796,12 +796,12 @@ async function refreshPreview() {
 
   if (elJ) {
     elJ.innerHTML = jawaraData.length
-      ? jawaraData.map((p,i) => `<li><strong>${p.nama}</strong> (${p.asal}) — ${p.skor} menang</li>`).join('')
+      ? jawaraData.map((p,i) => `<li><strong>${p.nama}</strong> (${p.asal}) — ${p.skor} Point</li>`).join('')
       : '<li><em>Belum ada data</em></li>';
   }
   if (elP) {
     elP.innerHTML = penjelajahData.length
-      ? penjelajahData.map((p,i) => `<li><strong>${p.nama}</strong> (${p.asal}) — ${p.skor} lomba</li>`).join('')
+      ? penjelajahData.map((p,i) => `<li><strong>${p.nama}</strong> (${p.asal}) — ${p.skor} Point</li>`).join('')
       : '<li><em>Belum ada data</em></li>';
   }
 }
